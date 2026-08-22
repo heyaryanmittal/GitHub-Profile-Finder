@@ -1,56 +1,72 @@
-# GitHub Repo Fetch
+# GitHub Profile Finder
 
-A sleek, React-based web application that allows users to search for GitHub profiles and explore their repositories in a modern, user-friendly interface.
+A sleek, modern web app to explore any GitHub user's profile and browse all their repositories instantly.
+
+![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-7-646CFF?logo=vite&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-3-06B6D4?logo=tailwindcss&logoColor=white)
 
 ## ✨ Features
 
-- **Profile Search**: Instantly fetch user details by entering a GitHub username.
-- **Detailed Analytics**: View follower count, following count, and number of public repositories.
-- **Repository Explorer**: Browse up to 100 of the user's latest repositories.
-- **Smart Links**: Direct links to view the full profile or specific repositories on GitHub.
-- **Responsive Design**: Fully optimized for desktop, tablet, and mobile devices.
-- **Dark Mode UI**: Built with a premium dark theme using Tailwind CSS.
-
-## 🛠️ Tech Stack
-
-- **Framework**: [React](https://react.dev/) + [Vite](https://vitejs.dev/)
-- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
-- **Language**: JavaScript (ES6+)
-- **API**: [GitHub REST API](https://docs.github.com/en/rest)
+- **Auto-Search** — Just type a GitHub username and results appear instantly (debounced, no button click needed)
+- **Profile Card** — Displays avatar, name, bio, location, company, blog, join date, followers, following, and public repo count
+- **Repository Grid** — All repos displayed in a responsive 3-column grid, each card clickable to open the repo on GitHub
+- **Pagination** — Fetches all repositories, even for users with 100+ repos
+- **Beautiful UI** — Dark theme with glassmorphism, purple accents, smooth animations, and stylish Playfair Display serif heading
+- **No Rate Limits** — Uses GitHub Personal Access Token for 5,000 requests/hour
 
 ## 🚀 Getting Started
 
 ### Prerequisites
-
-Ensure you have [Node.js](https://nodejs.org/) installed on your machine.
+- [Node.js](https://nodejs.org/) (v18+)
 
 ### Installation
 
-1.  **Clone the repository**
-    ```bash
-    git clone https://github.com/heyaryanmittal/repo-fetch.git
-    cd repo-fetch
-    ```
+```bash
+git clone https://github.com/heyaryanmittal/GitHub-Profile-Finder.git
+cd GitHub-Profile-Finder
+npm install
+```
 
-2.  **Install dependencies**
-    ```bash
-    npm install
-    ```
+### Setup GitHub Token (Required)
 
-3.  **Start the development server**
-    ```bash
-    npm run dev
-    ```
+1. Go to [GitHub Settings > Tokens](https://github.com/settings/tokens)
+2. Generate a new **classic token** (no scopes needed)
+3. Create a `.env` file in the project root:
 
-4.  **Build for production**
-    ```bash
-    npm run build
-    ```
+```env
+VITE_GITHUB_TOKEN=ghp_YOUR_TOKEN_HERE
+```
 
-## 🤝 Contributing
+### Run
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+```bash
+npm run dev
+```
 
-## 📄 License
+Open [http://localhost:5173](http://localhost:5173) in your browser.
 
-This project is licensed under the MIT License.
+## 🛠️ Tech Stack
+
+- **React 19** — UI library
+- **Vite 7** — Build tool & dev server
+- **Tailwind CSS 3** — Utility-first CSS
+- **GitHub REST API** — Data source
+
+## 📁 Project Structure
+
+```
+├── index.html           # Entry HTML with Google Fonts
+├── .env                 # GitHub token (gitignored)
+├── src/
+│   ├── App.jsx          # Main application component
+│   ├── index.css        # Design system & animations
+│   └── main.jsx         # React entry point
+├── tailwind.config.js
+├── vite.config.js
+└── package.json
+```
+
+## 📝 License
+
+This project is open source and available under the [MIT License](LICENSE).

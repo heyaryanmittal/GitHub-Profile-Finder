@@ -406,27 +406,51 @@ function App() {
     setRepos([]);
 
     try {
+      // Build auth headers if token is available (5,000 req/hr vs 60 req/hr)
+      const headers = {};
+      const token = import.meta.env.VITE_GITHUB_TOKEN;
+      if (token) {
+        headers.Authorization = `Bearer ${token}`;
+      }
+
       const userRes = await fetch(`https://api.github.com/users/${name}`, {
+        headers,
         signal: controller.signal,
       });
       if (!userRes.ok) {
         if (userRes.status === 404) throw new Error('User not found');
-        if (userRes.status === 403) throw new Error('API rate limit exceeded. Try again later.');
+        if (userRes.status === 403) throw new Error('API rate limit exceeded. Add a GitHub token to your .env file.');
         throw new Error('Error fetching user');
       }
       const user = await userRes.json();
       setUserData(user);
 
-      const reposRes = await fetch(
-        `https://api.github.com/users/${name}/repos?sort=updated&per_page=100`,
-        { signal: controller.signal }
-      );
-      if (!reposRes.ok) {
-        if (reposRes.status === 403) throw new Error('API rate limit exceeded while fetching repositories.');
-        throw new Error('Error fetching repositories');
+      // Fetch ALL repos with pagination (GitHub max 100 per page)
+      let allRepos = [];
+      let page = 1;
+      let hasMore = true;
+
+      while (hasMore) {
+        const reposRes = await fetch(
+          `https://api.github.com/users/${name}/repos?sort=updated&per_page=100&page=${page}`,
+          { headers, signal: controller.signal }
+        );
+        if (!reposRes.ok) {
+          if (reposRes.status === 403) throw new Error('API rate limit exceeded while fetching repositories.');
+          throw new Error('Error fetching repositories');
+        }
+        const reposData = await reposRes.json();
+        allRepos = [...allRepos, ...reposData];
+
+        // If we got fewer than 100, we've reached the last page
+        if (reposData.length < 100) {
+          hasMore = false;
+        } else {
+          page++;
+        }
       }
-      const reposData = await reposRes.json();
-      setRepos(reposData);
+
+      setRepos(allRepos);
     } catch (err) {
       if (err.name !== 'AbortError') {
         setError(err.message);
