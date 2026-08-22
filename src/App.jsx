@@ -515,7 +515,7 @@ function App() {
                 : 'border-gray-700/50 bg-[#111827] hover:border-gray-600/70'
             }`}>
               <span className="absolute left-5 text-gray-500 pointer-events-none">
-                {loading ? <Icons.Spinner /> : <Icons.Search />}
+                <Icons.Search />
               </span>
               <input
                 ref={inputRef}
@@ -523,28 +523,26 @@ function App() {
                 placeholder="Search GitHub username..."
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="w-full bg-transparent pl-14 pr-32 py-5 text-lg text-white placeholder-gray-600 focus:outline-none transition-colors"
+                className="w-full bg-transparent pl-14 pr-36 py-5 text-lg text-white placeholder-gray-600 focus:outline-none transition-colors"
                 id="search-input"
                 autoComplete="off"
                 spellCheck="false"
               />
-              {username && (
-                <button
-                  onClick={clearInput}
-                  className="absolute right-28 text-gray-600 hover:text-gray-300 transition-colors p-1"
-                  aria-label="Clear search"
-                  id="clear-search"
-                >
-                  <Icons.X />
-                </button>
-              )}
-              {/* Search button */}
+              {/* Search button with loading state */}
               <button
-                className="absolute right-2.5 px-6 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-500 hover:to-purple-400 text-white text-base font-bold transition-all duration-300 shadow-lg shadow-purple-500/25 hover:shadow-purple-500/40 active:scale-95"
+                className="absolute right-2.5 px-6 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-500 hover:to-purple-400 text-white text-base font-bold transition-all duration-300 shadow-lg shadow-purple-500/25 hover:shadow-purple-500/40 active:scale-95 flex items-center justify-center gap-2 min-w-[110px]"
                 onClick={() => fetchUserData(username.trim())}
                 id="search-button"
+                disabled={loading}
               >
-                Search
+                {loading ? (
+                  <>
+                    <Icons.Spinner />
+                    <span className="text-sm">Searching</span>
+                  </>
+                ) : (
+                  'Search'
+                )}
               </button>
             </div>
           </div>
