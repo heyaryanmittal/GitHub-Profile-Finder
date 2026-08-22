@@ -109,24 +109,9 @@ const Icons = {
       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
     </svg>
   ),
-  GitHub: () => (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+  GitHub: ({ size = 24 }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
       <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
-    </svg>
-  ),
-  Radar: () => (
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="url(#radarGrad)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <defs>
-        <linearGradient id="radarGrad" x1="0" y1="0" x2="24" y2="24">
-          <stop offset="0%" stopColor="#8b5cf6" />
-          <stop offset="100%" stopColor="#ec4899" />
-        </linearGradient>
-      </defs>
-      <circle cx="12" cy="12" r="10" />
-      <circle cx="12" cy="12" r="6" />
-      <circle cx="12" cy="12" r="2" />
-      <path d="M12 2v4" /><path d="M12 18v4" />
-      <path d="M2 12h4" /><path d="M18 12h4" />
     </svg>
   ),
 };
@@ -223,71 +208,127 @@ function ProfileCard({ user }) {
   });
 
   return (
-    <div className="w-full glass rounded-3xl p-6 sm:p-8 opacity-0 animate-slide-up glow-purple overflow-hidden relative" style={{ animationFillMode: 'forwards' }} id="profile-card">
-      {/* Subtle gradient accent at top */}
-      <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-purple-500/60 to-transparent" />
+    <div className="w-full rounded-3xl p-8 sm:p-10 opacity-0 animate-slide-up overflow-hidden relative border border-purple-500/30 bg-[#0f1117]" style={{ animationFillMode: 'forwards', boxShadow: '0 0 40px rgba(139, 92, 246, 0.08), inset 0 1px 0 rgba(139, 92, 246, 0.1)' }} id="profile-card">
 
-      <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
-        {/* Avatar */}
-        <div className="relative group flex-shrink-0">
-          <div className="absolute -inset-1 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full opacity-0 group-hover:opacity-30 blur-md transition-opacity duration-500" />
-          <img
-            src={user.avatar_url}
-            alt={`${user.login} avatar`}
-            className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-full object-cover border-2 border-white/10 shadow-xl group-hover:border-purple-500/40 transition-all duration-500"
-            id="profile-avatar"
-          />
-          <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-emerald-500 border-2 border-[#16161f]" title="Active" />
+      <div className="flex flex-col md:flex-row items-center md:items-start gap-8">
+
+        {/* Left column: Avatar + Social icons */}
+        <div className="flex flex-col items-center gap-4 flex-shrink-0">
+          {/* Avatar with purple ring */}
+          <div className="relative group">
+            <div className="absolute -inset-1.5 bg-gradient-to-br from-purple-500 via-purple-600 to-purple-400 rounded-full opacity-80 group-hover:opacity-100 transition-opacity duration-500" />
+            <img
+              src={user.avatar_url}
+              alt={`${user.login} avatar`}
+              className="relative w-32 h-32 sm:w-36 sm:h-36 rounded-full object-cover border-[3px] border-[#0f1117] shadow-2xl"
+              id="profile-avatar"
+            />
+          </div>
+
+          {/* Social icon buttons */}
+          <div className="flex items-center gap-2">
+            {user.blog && (
+              <a
+                href={user.blog.startsWith('http') ? user.blog : `https://${user.blog}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 rounded-full bg-[#1a1b26] border border-gray-700/60 flex items-center justify-center text-gray-400 hover:text-purple-400 hover:border-purple-500/50 transition-all duration-300"
+                title="Website"
+              >
+                <Icons.Link />
+              </a>
+            )}
+            <a
+              href={user.html_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-10 h-10 rounded-full bg-[#1a1b26] border border-gray-700/60 flex items-center justify-center text-gray-400 hover:text-purple-400 hover:border-purple-500/50 transition-all duration-300"
+              title="GitHub Profile"
+            >
+              <Icons.GitHub size={16} />
+            </a>
+          </div>
         </div>
 
-        {/* Info */}
-        <div className="flex-1 text-center sm:text-left min-w-0">
-          <h2 className="text-xl sm:text-2xl font-bold text-white leading-tight" id="profile-name">
+        {/* Right column: Info */}
+        <div className="flex-1 text-center md:text-left min-w-0">
+          {/* Name — large, bold, uppercase */}
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white uppercase tracking-wide leading-tight" id="profile-name">
             {user.name || user.login}
           </h2>
+
+          {/* Username */}
           <a
             href={user.html_url}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 text-sm text-purple-400 hover:text-purple-300 transition-colors mt-0.5 font-medium"
+            className="inline-block text-base sm:text-lg text-purple-400 hover:text-purple-300 transition-colors mt-1 font-medium"
             id="profile-link"
           >
-            @{user.login} <Icons.ArrowUpRight />
+            @{user.login}
           </a>
 
+          {/* Bio */}
           {user.bio && (
-            <p className="text-sm text-gray-400 mt-3 leading-relaxed max-w-lg" id="profile-bio">
-              {user.bio}
+            <p className="text-base text-gray-400 mt-4 leading-relaxed max-w-xl" id="profile-bio">
+              👋 {user.bio}
             </p>
           )}
 
-          {/* Meta badges */}
-          <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-4 gap-y-2 mt-4 text-xs text-gray-500">
+          {/* Location & Joined pills */}
+          <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 mt-5">
             {user.location && (
-              <span className="flex items-center gap-1.5">
-                <Icons.Location /> {user.location}
+              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-gray-700/60 bg-transparent text-sm text-gray-400">
+                <span className="text-red-400">📍</span> {user.location}
               </span>
             )}
-            {user.company && (
-              <span className="flex items-center gap-1.5">
-                <Icons.Company /> {user.company}
-              </span>
-            )}
-            {user.blog && (
-              <a href={user.blog.startsWith('http') ? user.blog : `https://${user.blog}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-purple-400 transition-colors">
-                <Icons.Link /> {user.blog.replace(/^https?:\/\//, '').replace(/\/$/, '')}
-              </a>
-            )}
-            <span className="flex items-center gap-1.5">
-              <Icons.Calendar /> Joined {joinDate}
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-gray-700/60 bg-transparent text-sm text-gray-400">
+              <span className="text-blue-400">📅</span> Joined {joinDate}
             </span>
+            {user.company && (
+              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-gray-700/60 bg-transparent text-sm text-gray-400">
+                <span className="text-purple-400">🏢</span> {user.company}
+              </span>
+            )}
           </div>
 
-          {/* Stats */}
-          <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3 mt-5">
-            <StatPill icon={Icons.Repo} label="Repos" value={user.public_repos} color="#8b5cf6" />
-            <StatPill icon={Icons.Users} label="Followers" value={user.followers} color="#34d399" />
-            <StatPill icon={Icons.Users} label="Following" value={user.following} color="#60a5fa" />
+          {/* Stats: 3 large boxes */}
+          <div className="flex flex-wrap items-stretch justify-center md:justify-start gap-4 mt-7">
+            {/* Followers */}
+            <div className="flex items-center gap-3 px-5 py-3.5 rounded-xl border border-gray-700/60 bg-[#0f1117] min-w-[140px] hover:border-purple-500/40 transition-colors duration-300">
+              <div className="w-10 h-10 rounded-lg bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400">
+                <Icons.Users />
+              </div>
+              <div className="flex flex-col">
+                <span className="text-xl font-bold text-white leading-tight">{formatCount(user.followers)}</span>
+                <span className="text-[11px] uppercase tracking-widest text-gray-500 font-semibold">Followers</span>
+              </div>
+            </div>
+
+            {/* Following */}
+            <div className="flex items-center gap-3 px-5 py-3.5 rounded-xl border border-gray-700/60 bg-[#0f1117] min-w-[140px] hover:border-purple-500/40 transition-colors duration-300">
+              <div className="w-10 h-10 rounded-lg bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" />
+                  <line x1="19" x2="19" y1="8" y2="14" /><line x1="22" x2="16" y1="11" y2="11" />
+                </svg>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-xl font-bold text-white leading-tight">{formatCount(user.following)}</span>
+                <span className="text-[11px] uppercase tracking-widest text-gray-500 font-semibold">Following</span>
+              </div>
+            </div>
+
+            {/* Public Repos */}
+            <div className="flex items-center gap-3 px-5 py-3.5 rounded-xl border border-gray-700/60 bg-[#0f1117] min-w-[140px] hover:border-purple-500/40 transition-colors duration-300">
+              <div className="w-10 h-10 rounded-lg bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400">
+                <Icons.Repo />
+              </div>
+              <div className="flex flex-col">
+                <span className="text-xl font-bold text-white leading-tight">{formatCount(user.public_repos)}</span>
+                <span className="text-[11px] uppercase tracking-widest text-gray-500 font-semibold">Public Repos</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -298,7 +339,7 @@ function ProfileCard({ user }) {
 /* ===== Loading Skeleton ===== */
 function Skeleton() {
   return (
-    <div className="w-full max-w-6xl mx-auto mt-10 opacity-0 animate-fade-in" style={{ animationFillMode: 'forwards' }}>
+    <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 opacity-0 animate-fade-in" style={{ animationFillMode: 'forwards' }}>
       {/* Profile skeleton */}
       <div className="glass rounded-3xl p-6 sm:p-8 mb-10">
         <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
@@ -413,6 +454,7 @@ function App() {
   };
 
   const hasResults = userData && !loading;
+  const showLanding = !hasResults && !loading && !error;
 
   return (
     <div className="noise-overlay min-h-screen relative">
@@ -422,87 +464,79 @@ function App() {
       {/* Content */}
       <div className="relative z-10 flex flex-col min-h-screen">
 
-        {/* ===== Header / Navbar ===== */}
-        <header className="w-full glass-strong sticky top-0 z-50" id="header">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            {/* Logo */}
-            <div className="flex items-center gap-2.5 select-none">
-              <Icons.Radar />
-              <span className="text-lg font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-                RepoRadar
+        {/* ===== Top Section: Heading + Search (always visible) ===== */}
+        <div className={`w-full flex flex-col items-center transition-all duration-500 ease-out ${
+          hasResults || loading ? 'pt-8 pb-5' : 'pt-[12vh] pb-10'
+        }`}>
+          {/* Heading */}
+          <h1 className={`text-center leading-[1.15] transition-all duration-500 ${
+            hasResults || loading
+              ? 'text-2xl sm:text-3xl mb-5'
+              : 'text-5xl sm:text-6xl md:text-7xl mb-10'
+          }`} style={{ fontFamily: "'Playfair Display', Georgia, serif", fontWeight: 900 }} id="main-heading">
+            <span className="text-white">Find any </span>
+            <span className="bg-gradient-to-r from-purple-400 via-purple-500 to-purple-400 bg-clip-text text-transparent italic" style={{ fontFamily: "'Playfair Display', Georgia, serif", fontWeight: 900 }}>
+              GitHub
+            </span>
+            <span className="text-white"> profile</span>
+          </h1>
+
+          {/* Search Bar */}
+          <div className={`w-full transition-all duration-500 ${
+            hasResults || loading ? 'max-w-xl' : 'max-w-2xl'
+          } px-4`} id="search-container">
+            <div className={`relative flex items-center rounded-2xl border-2 transition-all duration-300 ${
+              username
+                ? 'border-purple-500/40 bg-[#111827] shadow-[0_0_40px_rgba(139,92,246,0.12)]'
+                : 'border-gray-700/50 bg-[#111827] hover:border-gray-600/70'
+            }`}>
+              <span className="absolute left-5 text-gray-500 pointer-events-none">
+                {loading ? <Icons.Spinner /> : <Icons.Search />}
               </span>
+              <input
+                ref={inputRef}
+                type="text"
+                placeholder="Search GitHub username..."
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="w-full bg-transparent pl-14 pr-32 py-5 text-lg text-white placeholder-gray-600 focus:outline-none transition-colors"
+                id="search-input"
+                autoComplete="off"
+                spellCheck="false"
+              />
+              {username && (
+                <button
+                  onClick={clearInput}
+                  className="absolute right-28 text-gray-600 hover:text-gray-300 transition-colors p-1"
+                  aria-label="Clear search"
+                  id="clear-search"
+                >
+                  <Icons.X />
+                </button>
+              )}
+              {/* Search button */}
+              <button
+                className="absolute right-2.5 px-6 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-500 hover:to-purple-400 text-white text-base font-bold transition-all duration-300 shadow-lg shadow-purple-500/25 hover:shadow-purple-500/40 active:scale-95"
+                onClick={() => fetchUserData(username.trim())}
+                id="search-button"
+              >
+                Search
+              </button>
             </div>
-
-            {/* Search bar in header */}
-            <div className="relative w-full max-w-md mx-4 sm:mx-8" id="search-container">
-              <div className={`relative flex items-center rounded-full glass transition-all duration-300 ${username ? 'ring-1 ring-purple-500/30' : 'hover:ring-1 hover:ring-white/10'}`}>
-                <span className="absolute left-4 text-gray-500 pointer-events-none">
-                  {loading ? <Icons.Spinner /> : <Icons.Search />}
-                </span>
-                <input
-                  ref={inputRef}
-                  type="text"
-                  placeholder="Search GitHub username..."
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  className="w-full bg-transparent pl-12 pr-10 py-2.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:placeholder-gray-500 transition-colors"
-                  id="search-input"
-                  autoComplete="off"
-                  spellCheck="false"
-                />
-                {username && (
-                  <button
-                    onClick={clearInput}
-                    className="absolute right-3 text-gray-600 hover:text-gray-300 transition-colors p-0.5"
-                    aria-label="Clear search"
-                    id="clear-search"
-                  >
-                    <Icons.X />
-                  </button>
-                )}
-              </div>
-            </div>
-
-            {/* GitHub link */}
-            <a
-              href="https://github.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-600 hover:text-white transition-colors flex-shrink-0"
-              aria-label="GitHub"
-            >
-              <Icons.GitHub />
-            </a>
           </div>
-        </header>
+        </div>
 
-        {/* ===== Hero / Landing State ===== */}
-        {!hasResults && !loading && !error && (
-          <main className="flex-1 flex flex-col items-center justify-center px-4 -mt-16" id="landing">
-            <div className="text-center opacity-0 animate-slide-up" style={{ animationFillMode: 'forwards' }}>
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass text-xs text-gray-400 mb-8 animate-float">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                Powered by GitHub API
-              </div>
-              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-[1.1] tracking-tight">
-                <span className="text-white">Explore </span>
-                <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-purple-400 bg-clip-text text-transparent animate-gradient">
-                  GitHub
-                </span>
-                <br />
-                <span className="text-white">Repositories</span>
-              </h1>
-              <p className="mt-6 text-gray-500 text-base sm:text-lg max-w-md mx-auto leading-relaxed">
-                Type a username above to instantly explore their profile and browse through all their repositories.
-              </p>
-
-              {/* Keyboard hint */}
-              <div className="mt-10 flex items-center justify-center gap-2 text-xs text-gray-600">
-                <kbd className="px-2 py-1 rounded-md bg-white/[0.04] border border-white/[0.08] font-mono text-[11px]">↑</kbd>
-                Start typing to search
-              </div>
+        {/* ===== Landing State: Octocat + Message ===== */}
+        {showLanding && (
+          <div className="flex-1 flex flex-col items-center justify-center px-4 -mt-8 opacity-0 animate-fade-in" style={{ animationFillMode: 'forwards' }} id="landing">
+            {/* GitHub Octocat */}
+            <div className="text-gray-700/50 mb-6">
+              <Icons.GitHub size={120} />
             </div>
-          </main>
+            <p className="text-gray-500 text-base sm:text-lg font-medium">
+              Start searching to find users
+            </p>
+          </div>
         )}
 
         {/* ===== Loading State ===== */}
@@ -527,7 +561,7 @@ function App() {
 
         {/* ===== Results ===== */}
         {hasResults && (
-          <main className="flex-1 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-16" id="results">
+          <main className="flex-1 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-16" id="results">
             {/* Profile */}
             <ProfileCard user={userData} />
 
